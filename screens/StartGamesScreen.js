@@ -1,19 +1,87 @@
-import React from "react";
-import { View, StyleSheet, Text, TextInput, Button } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  Button,
+  TouchableWithoutFeedback,
+  Keyboard
+} from "react-native";
+import Card from "../components/Card";
+import Colors from "../constants/colors";
+import Input from "../components/Input";
 
 const StartGameScreen = props => {
+  const [enteredValues, setEnteredValue] = useState("");
+  const [confirmed, setConfrimed] = useState(false);
+  const [SelectNumber, setSelectedNumber] = useState();
+
+  const numberInputHandler = inputText => {
+    setEnteredValue(inputText.replace(/[^0-9]/g, ""));
+  };
+
+  const resetInputHandler = () => {
+    setEnteredValue("");
+    setConfrimed(false);
+  };
+
+  const confrimInputHandler = () => {
+    const chooseNumber = parseInt(enteredValues);
+    if (isNaN(chooseNumber) || chooseNumber <= 0 || chooseNumber > 99) {
+      return;
+    }
+    setEnteredValue("");
+    setSelectedNumber(chooseNumber);
+    setConfrimed(true);
+  };
+
+  let confrimedOutput;
+
+  if (confirmed) {
+    confrimedOutput = <Text>Choose Number: {SelectNumber}</Text>;
+  }
+
   return (
-    <View style={styles.screen}>
-      <Text style={styles.title}>Start A New Game!</Text>
-      <View style={styles.inputContainer}>
-        <Text>Selec a Number</Text>
-        <TextInput />
-        <View style={styles.ButtonContainer}>
-          <Button title="Reset" onPress={() => {}} />
-          <Button title="Confrim" onPress={() => {}} />
-        </View>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
+    >
+      <View style={styles.screen}>
+        <Text style={styles.title}>Start A New Game!</Text>
+        <Card style={styles.inputContainer}>
+          <Text>Selec a Number</Text>
+          <Input
+            style={styles.input}
+            blurOnSubmit
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="number-pad"
+            maxLength={2}
+            onChangeText={numberInputHandler}
+            value={enteredValues}
+          />
+          <View style={styles.ButtonContainer}>
+            <View style={styles.button}>
+              <Button
+                title="Reset"
+                onPress={resetInputHandler}
+                color={Colors.accent}
+              />
+            </View>
+            <View style={styles.button}>
+              <Button
+                title="Confrim"
+                onPress={confrimInputHandler}
+                color={Colors.primary}
+              />
+            </View>
+          </View>
+        </Card>
+        {confrimedOutput}
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -30,24 +98,20 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: 300,
     maxWidth: "80%",
-    alignItems: "center",
-    shadowColor: "black",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowRadius: 6,
-    shadowOpacity: 0.26,
-    backgroundColor: "white",
-    elevation: 8,
-    padding: 20,
-    borderBottomLeftRadius: 10
+    alignItems: "center"
   },
   ButtonContainer: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 15
+  },
+  button: {
+    width: 100
+  },
+  input: {
+    width: 50,
+    textAlign: "center"
   }
 });
 
