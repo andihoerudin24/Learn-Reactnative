@@ -15,46 +15,43 @@ import Input from "../components/Input";
 import NumberContainer from "../components/NumberContainer";
 
 const StartGameScreen = props => {
-  const [enteredValues, setEnteredValue] = useState("");
-  const [confirmed, setConfrimed] = useState(false);
-  const [SelectNumber, setSelectedNumber] = useState();
+  const [enteredValue, setEnteredValue] = useState('');
+  const [confirmed, setConfirmed] = useState(false);
+  const [selectedNumber, setSelectedNumber] = useState();
 
   const numberInputHandler = inputText => {
-    setEnteredValue(inputText.replace(/[^0-9]/g, ""));
+    setEnteredValue(inputText.replace(/[^0-9]/g, ''));
   };
 
   const resetInputHandler = () => {
-    setEnteredValue("");
-    setConfrimed(false);
+    setEnteredValue('');
+    setConfirmed(false);
   };
 
-  const confrimInputHandler = () => {
-    const chooseNumber = parseInt(enteredValues);
-    if (isNaN(chooseNumber) || chooseNumber <= 0 || chooseNumber > 99) {
+  const confirmInputHandler = () => {
+    const chosenNumber = parseInt(enteredValue);
+    if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
       Alert.alert(
-        "Invalid number",
-        "Number Has to be a number between 1 and 99.",
-        [{ text: "Okay", style: "destructive", onPress: resetInputHandler }]
+        'Invalid number!',
+        'Number has to be a number between 1 and 99.',
+        [{ text: 'Okay', style: 'destructive', onPress: resetInputHandler }]
       );
       return;
     }
-    setConfrimed(true);
-    setSelectedNumber(chooseNumber);
-    setEnteredValue("");
+    setConfirmed(true);
+    setSelectedNumber(chosenNumber);
+    setEnteredValue('');
     Keyboard.dismiss();
   };
 
-  let confrimedOutput;
+  let confirmedOutput;
 
   if (confirmed) {
-    confrimedOutput = (
+    confirmedOutput = (
       <Card style={styles.summaryContainer}>
-        <Text>You Selected</Text>
-        <NumberContainer>{SelectNumber}</NumberContainer>
-        <Button
-          title="START GAME"
-          onPress={() => props.onStartGame(SelectNumber)}
-        />
+        <Text>You selected</Text>
+        <NumberContainer>{selectedNumber}</NumberContainer>
+        <Button title="START GAME" onPress={() => props.onStartGame(selectedNumber)} />
       </Card>
     );
   }
@@ -66,9 +63,9 @@ const StartGameScreen = props => {
       }}
     >
       <View style={styles.screen}>
-        <Text style={styles.title}>Start A New Game!</Text>
+        <Text style={styles.title}>Start a New Game!</Text>
         <Card style={styles.inputContainer}>
-          <Text>Selec a Number</Text>
+          <Text>Select a Number</Text>
           <Input
             style={styles.input}
             blurOnSubmit
@@ -77,9 +74,9 @@ const StartGameScreen = props => {
             keyboardType="number-pad"
             maxLength={2}
             onChangeText={numberInputHandler}
-            value={enteredValues}
+            value={enteredValue}
           />
-          <View style={styles.ButtonContainer}>
+          <View style={styles.buttonContainer}>
             <View style={styles.button}>
               <Button
                 title="Reset"
@@ -89,14 +86,14 @@ const StartGameScreen = props => {
             </View>
             <View style={styles.button}>
               <Button
-                title="Confrim"
-                onPress={confrimInputHandler}
+                title="Confirm"
+                onPress={confirmInputHandler}
                 color={Colors.primary}
               />
             </View>
           </View>
         </Card>
-        {confrimedOutput}
+        {confirmedOutput}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -106,7 +103,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     padding: 10,
-    alignItems: "center"
+    alignItems: 'center'
   },
   title: {
     fontSize: 20,
@@ -114,13 +111,13 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: 300,
-    maxWidth: "80%",
-    alignItems: "center"
+    maxWidth: '80%',
+    alignItems: 'center'
   },
-  ButtonContainer: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
+  buttonContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
     paddingHorizontal: 15
   },
   button: {
@@ -128,11 +125,11 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 50,
-    textAlign: "center"
+    textAlign: 'center'
   },
   summaryContainer: {
     marginTop: 20,
-    alignItems: "center"
+    alignItems: 'center'
   }
 });
 
